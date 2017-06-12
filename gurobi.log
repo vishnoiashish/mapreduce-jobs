@@ -1,0 +1,13 @@
+
+Gurobi 7.0.2 (win64) logging started 01/29/17 01:19:34
+
+
+Gurobi 7.0.2 (win64) logging started 01/29/17 01:30:05
+
+
+Gurobi Optimizer version 7.0.2 build v7.0.2rc1 (win64)
+Copyright (c) 2017, Gurobi Optimization, Inc.
+
+
+ERROR 10003: Unable to open file 'coins.lp' for input
+
