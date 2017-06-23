@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)http://www.mccarroll.net/blog/pyspark2/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1"><script data-cfasync="false" src="./Getting started with PySpark - Part 2_files/d3cb6d44b9e821f451b7b44ac8db4799.php"></script><script type="text/javascript" src="./Getting started with PySpark - Part 2_files/check_version.php"></script><style>@import "http://people.apache.org/~ebourg/java7doc-fix.css";</style><script data-cfasync="false" type="text/javascript" src="./Getting started with PySpark - Part 2_files/d3cb6d44b9e821f451b7b44ac8db4799(1).php"></script></head><body>`
+
+
+        <title>Getting started with PySpark - Part 2</title>
+        
+        <meta name="microcms-title" content="Getting started with PySpark - Part 2">
+        <meta name="microcms-blog" content="">
+        <meta name="description" content="Getting started with PySpark - Part 2">
+        <meta name="microcms-date" content="2014-05-05T12:00:00">
+        <meta name="microcms-tags" content="pyspark,python,data science">
+ 	    
+<link href="http://www.mccarroll.net/rss.xml" rel="alternate" type="application/rss+xml" title="mccarroll.net RSS feed">
+<link href="./Getting started with PySpark - Part 2_files/bootstrap.min.css" rel="stylesheet">
+<link href="./Getting started with PySpark - Part 2_files/bootstrap-theme.min.css" rel="stylesheet">
+<link href="./Getting started with PySpark - Part 2_files/mccdotnet.css" rel="stylesheet">
+<link href="./Getting started with PySpark - Part 2_files/pygments.css" rel="stylesheet">
+<script type="text/javascript" async="" src="./Getting started with PySpark - Part 2_files/ga.js.download"></script><script type="text/javascript" src="./Getting started with PySpark - Part 2_files/mccdotnet.js.download"></script>
+<script type="text/javascript" src="./Getting started with PySpark - Part 2_files/tinplate.js.download"></script>
+<script type="text/javascript" src="./Getting started with PySpark - Part 2_files/feedback.js.download"></script>
+
+
+
+        <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-28338381-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+        <style>
+            table.rdd {
+                border:2px solid;
+                border-color: #808080;
+                margin-left:20px;
+                margin-bottom:20px;
+                table-layout: fixed;
+                border-collapse: collapse;
+            }
+
+            table.rdd td {
+                padding: 10px;
+                border: dashed 1px;
+                border-color: #909090;
+            }
+        </style>
+    
+    <script src="./Getting started with PySpark - Part 2_files/jquery.min.js.download"></script>
+<script src="./Getting started with PySpark - Part 2_files/bootstrap.min.js.download"></script>
+
+
+	
+	<!-- <div id="header">
+            <div id="title">
+                <a href="./../../index.html"><em><span style="color:black;font-size:36px;">mccarroll<span style="color:red;">dot</span>net</span></em></a>
+	    </div> -->
+	    
+<nav class="navbar navbar-default">
+  <div class="container-fluid" id="header">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <div>
+            <div id="title">
+                <a href="http://www.mccarroll.net/index.html"><em><span style="color:black;font-size:36px;">mccarroll<span style="color:red;">dot</span>net</span></em></a>
+            </div>
+      </div>      
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" >This Site<span class="caret"></span></a> -->
+<a href="http://www.mccarroll.net/blog/pyspark2/#" style="top:-7px" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><button class="btn btn-default">This Site<span class="caret"></span></button></a>
+          <ul class="dropdown-menu" role="menu">
+                    <li style="padding:5px;"><a href="http://www.mccarroll.net/index.html">Home</a></li>
+                    <li style="padding:5px;"><a href="http://www.mccarroll.net/py2js/index.html">Python-to-Javascript compiler</a></li>
+                    <li style="padding:5px;"><a href="http://www.mccarroll.net/rss.xml"><img style="vertical-align:middle;padding-right:10px;" src="./Getting started with PySpark - Part 2_files/feed-icon-28x28.png" alt="Subscribe (RSS 2.0)">Subscribe (RSS 2.0)</a></li>
+                    <li class="divider"></li>
+                    <li style="padding:5px;"><a href="http://www.mccarroll.net/sitemap/index.html"><em>Sitemap</em></a></li>
+            </ul>
+        </li>
+      </ul>
+      <div class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" id="search_box" class="form-control" placeholder="Search">
+        </div>
+        <button id="search_btn" class="btn btn-default" onclick="search()">Submit</button>
+      </div>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+	
+
+
+
+
+	
+        <div class="container">
+            
+
+            <div>
+	            <h1>Getting started with PySpark - Part 2</h1>
+                <div class="synopsis">
+                    <img src="./Getting started with PySpark - Part 2_files/pyspark.png" class="headimage">
+                    <p>
+                        In <a href="http://www.mccarroll.net/blog/pyspark/index.html">Part 1</a> we looked at installing the data processing engine <a href="https://spark.incubator.apache.org/" target="new">Apache Spark</a> and started to explore some features of its Python API, <a href="http://spark.apache.org/docs/0.9.0/python-programming-guide.html">PySpark</a>.  In this article, we look in more detail at using PySpark.
+                    </p>
+                </div>
+                <h2 style="clear:both;">Revisiting the wordcount example</h2>
+                <p>
+                    Recall the example described in <a href="http://www.mccarroll.net/blog/pyspark/index.html">Part 1</a>, which performs a wordcount on the documents stored under folder /user/dev/gutenberg on HDFS.  We start by writing the transformation in a single invocation, with a few changes to deal with some punctuation characters and convert the text to lower case.
+                </p>
+<pre>&gt;&gt;&gt; wordcounts = sc.textFile('hdfs://ubuntu1:54310/user/dev/gutenberg') \
+        .map( lambda x: x.replace(',',' ').replace('.',' ').replace('-',' ').lower()) \
+        .flatMap(lambda x: x.split()) \
+        .map(lambda x: (x, 1)) \
+        .reduceByKey(lambda x,y:x+y) \
+        .map(lambda x:(x[1],x[0])) \
+        .sortByKey(False) 
+&gt;&gt;&gt; wordcounts.take(10)
+[(500662, u'the'), (331864, u'and'), (289323, u'of'), (196741, u'to'), 
+ (149380, u'a'), (132609, u'in'), (100711, u'that'), (92052, u'i'), 
+ (77469, u'he'), (72301, u'for')]
+</pre>
+                <p>
+		            To understand whats going on its best to consider this program as a pipeline of transformations.  Apart from the initial call to the textFile method of variable sc (SparkContext) to create the first resilient distributed dataset (RDD) by reading lines from each file in the specified directory on HDFS, subsequent calls transfrom each input RDD into a new output RDD.  We'll consider a simple example where we start by creating an RDD with just two lines with sc.parallelize, rather than reading the data from files with sc.textFile, and trace what each step in our wordcount program does.  The lines are a quote from a <a href="http://en.wikipedia.org/wiki/Dr._Seuss">Dr Seuss</a> story.
+                </p>
+               
+<pre>&gt;&gt;&gt; lines = sc.parallelize(['Its fun to have fun,','but you have to know how.']) 
+&gt;&gt;&gt; wordcounts = lines.map( lambda x: x.replace(',',' ').replace('.',' ').replace('-',' ').lower()) \
+        .flatMap(lambda x: x.split()) \
+        .map(lambda x: (x, 1)) \
+        .reduceByKey(lambda x,y:x+y) \
+        .map(lambda x:(x[1],x[0])) \
+        .sortByKey(False) 
+&gt;&gt;&gt; wordcounts.take(10)
+[(2, 'to'), (2, 'fun'), (2, 'have'), (1, 'its'), (1, 'know'), (1, 'how'), (1, 'you'), (1, 'but')]
+</pre>
+                <p>
+                    </p><ol>
+                              
+                        <li>
+                            <p><b>map( <it>&lt;function&gt;</it> )</b></p>
+                            <p>map returns a new RDD containing values created by applying the supplied function to each value in the original RDD</p>
+                            <p>Here we use a lambda function which replaces some common punctuation characters with spaces and convert to lower case, producing a new RDD:</p>
+<pre>&gt;&gt;&gt; r1 = lines.map( lambda x: x.replace(',',' ').replace('.',' ').replace('-',' ').lower())
+&gt;&gt;&gt; r1.take(10)
+['its fun to have fun ', 'but you have to know how ']
+</pre>
+                        </li>              
+                        <li>
+                            <p><b>flatMap( <it>&lt;function&gt;</it> )</b></p>
+                            <p>flatMap applies a function which takes each input value and returns a list.  Each value of the list becomes a new, separate value in the output RDD</p>
+                            <p>In our example, the lines are split into words and then each word becomes a separate value in the output RDD:</p>
+<pre>&gt;&gt;&gt; r2 = r1.flatMap(lambda x: x.split())
+&gt;&gt;&gt; r2.take(20)
+['its', 'fun', 'to', 'have', 'fun', 'but', 'you', 'have', 'to', 'know', 'how']
+&gt;&gt;&gt;
+</pre>
+                        </li>
+                        <li>
+                            <p><b>map( <it>&lt;function&gt;</it> )</b></p>
+                            
+                            <p>In this second map invocation, we use a function which replaces each original value in the input RDD with a 2-tuple containing the word in the first position and the integer value 1 in the second position:</p>
+<pre>&gt;&gt;&gt; r3 = r2.map(lambda x: (x, 1))
+&gt;&gt;&gt; r3.take(20)
+[('its', 1), ('fun', 1), ('to', 1), ('have', 1), ('fun', 1), ('but', 1), ('you', 1), ('have', 1), ('to', 1), ('know', 1), ('how', 1)]
+&gt;&gt;&gt;
+</pre>                            
+                        </li>
+                        <li>
+                            <p><b>reduceByKey( <it>&lt;function</it> )</b></p>
+                            <p>Expect that the input RDD contains tuples of the form (&lt;key&gt;,&lt;value&gt;).  Create a new RDD containing a tuple for each unique value of &lt;key&gt; in the input, where the value in the second position of the tuple is created by applying the supplied lambda function to the &lt;value&gt;s with the matching &lt;key&gt; in the input RDD</p>
+                            <p>Here the key will be the word and lambda function will sum up the word counts for each word.  The output RDD will consist of a single tuple for each unique word in the data, where the word is stored at the first position in the tuple and the word count is stored at the second position</p>
+<pre>&gt;&gt;&gt; r4 = r3.reduceByKey(lambda x,y:x+y)
+&gt;&gt;&gt; r4.take(20)
+[('fun', 2), ('to', 2), ('its', 1), ('know', 1), ('how', 1), ('you', 1), ('have', 2), ('but', 1)]
+</pre>                          
+                        </li>  
+                        <li>
+                            <p><b>map( <it>&lt;function&gt;</it> )</b></p>
+                            <p>map a lambda function to the data which will swap over the first and second values in each tuple, now the word count appears in the first position and the word in the second position</p>
+<pre>&gt;&gt;&gt; r5 = r4.map(lambda x:(x[1],x[0]))
+&gt;&gt;&gt; r5.take(20)
+[(2, 'fun'), (1, 'how'), (1, 'its'), (1, 'know'), (2, 'to'), (1, 'you'), (1, 'but'), (2, 'have')]
+</pre>                            
+                        </li>
+                        <li>
+                            <p><b>sortByKey( <it>ascending=True|False</it> )</b></p>
+                            <p>sort the input RDD by the key value (the value at the first position in each tuple)</p>
+                            <p>In this example the first position stores the word count so this will sort the words so that the most frequently occurring words occur first in the RDD - the False parameter sets the sort order to descending (pass</p>
+<pre>&gt;&gt;&gt; r6 = r5.sortByKey(ascending=False)
+&gt;&gt;&gt; r6.take(20)
+[(2, 'fun'), (2, 'to'), (2, 'have'), (1, 'its'), (1, 'know'), (1, 'how'), (1, 'you'), (1, 'but')]
+&gt;&gt;&gt;
+</pre>                        
+                        </li>
+                    </ol>
+                <p></p>
+                <h2>Finding frequent word bigrams</h2>
+                <p>For a slightly more complicated task, lets look into splitting up sentences from our documents into word bigrams.  A <a href="http://en.wikipedia.org/wiki/Bigram">bigram</a> is pair of successive tokens in some sequence.  We will look at building bigrams from the sequences of words in each sentence, and then try to find the most frequently occuring ones.
+                </p>
+                <p>The first problem is that values in each partition of our initial RDD describe lines from the file rather than sentences.  Sentences may be split over multiple lines.  The glom() RDD method is used to create a single entry for each document containing the list of all lines, we can then join the lines up, then resplit them into sentences using "." as the separator, using flatMap so that every object in our RDD is now a sentence.
+                </p>
+<pre>&gt;&gt;&gt; sentences = sc.textFile('hdfs://ubuntu1:54310/user/dev/gutenberg') \
+    .glom() \
+    .map(lambda x: " ".join(x)) \
+    .flatMap(lambda x: x.split("."))
+</pre>
+                <p>Now we have isolated each sentence we can split it into a list of words and extract the word bigrams from it.  Our new RDD contains tuples containing the word bigram (itself a tuple containing the first and second word) as the first value and the number 1 as the second value. 
+                </p>
+<pre>&gt;&gt;&gt; bigrams = sentences.map(lambda x:x.split()) \
+    .flatMap(lambda x: [((x[i],x[i+1]),1) for i in range(0,len(x)-1)])
+</pre>
+                <p>Finally we can apply the same reduceByKey and sort steps that we used in the wordcount example, to count up the bigrams and sort them in order of descending frequency.  In reduceByKey the key is not an individual word but a bigram.
+                </p>
+<pre>&gt;&gt;&gt; freq_bigrams = bigrams.reduceByKey(lambda x,y:x+y) \
+    .map(lambda x:(x[1],x[0])) \
+    .sortByKey(False)
+&gt;&gt;&gt; freq_bigrams.take(10)
+[(73228, (u'of', u'the')), (36008, (u'in', u'the')), (23860, (u'to', u'the')), 
+ (20582, (u'and', u'the')), (11534, (u'to', u'be')), (10944, (u'on', u'the')), 
+ (10548, (u'for', u'the')), (10374, (u'0', u'0')), (10117, (u'from', u'the')), 
+ (9983, (u'with', u'the'))] 
+</pre>
+                <h2>RDD partitions, map and reduce</h2>
+                <p>
+                    In the example above, the map and reduceByKey RDD transformations will be immediately recognizable to aficionados of the MapReduce paradigm.  Spark supports the efficient parallel application of map and reduce operations by dividing data up into multiple <it>partitions</it>.  In the example above, each file will by default generate one partition.  What Spark adds to existing frameworks like Hadoop are the ability to add multiple map and reduce tasks to a single workflow.
+                </p> 
+                <p>
+                    There are some useful ways to look at the distribution of objects in each partition in our rdd:
+                </p>
+<pre>&gt;&gt;&gt; lines = sc.textFile('hdfs://ubuntu1:54310/user/dev/gutenberg')
+&gt;&gt;&gt; def countPartitions(id,iterator): 
+         c = 0 
+         for _ in iterator: 
+              c += 1 
+         yield (id,c) 
+&gt;&gt;&gt; lines.mapPartitionsWithSplit(countPartitions).collectAsMap()
+{0: 566, 1: 100222, 2: 124796, 3: 3735, ..., 96: 6690, 97: 3921, 98: 16271, 99: 1138}
+&gt;&gt;&gt; 
+</pre>
+<p>
+    </p><ul>
+        <li>
+       Each partition within an RDD is replicated across multiple workers running on different nodes in a cluster so that failure of a single worker should not cause the RDD to become unavailable.
+        </li>
+        <li>
+       Many operations including map and flatMap operations can be applied independently to each partition, running as concurrent jobs based on the number of available cores.  Typically these operations will preserve the number of partitions.
+        </li>
+        <li>
+            When processing reduceByKey, Spark will create a number of output partitions based on the <it>default paralellism</it> based on the numbers of nodes and cores available to Spark.  Data is effectively reshuffled so that input data from different input partitions with the same key value is passed to the same output partition and combined there using the specified reduce function.  sortByKey is another operation which transforms N input partitions to M output partitions.
+        </li>
+    </ul>
+<p></p>
+<pre>&gt;&gt;&gt; sc.defaultParallelism
+4
+&gt;&gt;&gt; wordcounts = sc.textFile('hdfs://ubuntu1:54310/user/dev/gutenberg') \
+            .map( lambda x: x.replace(',',' ').replace('.',' ').replace('-',' ').lower()) \
+            .flatMap(lambda x: x.split()) \
+            .map(lambda x: (x, 1)) \
+            .reduceByKey(lambda x,y:x+y)
+&gt;&gt;&gt; wordcounts.mapPartitionsWithSplit(countPartitions).collectAsMap()
+{0: 122478, 1: 122549, 2: 121597, 3: 122587}
+</pre>    
+<p>
+    The number of partitions generated by the reduce stage can be controlled by supplying the desired number of partitions as an extra parameter to reduceByKey:
+</p>
+<pre>        
+&gt;&gt;&gt; wordcounts = sc.textFile('hdfs://ubuntu1:54310/user/dev/gutenberg') \
+             .map( lambda x: x.replace(',',' ').replace('.',' ').replace('-',' ').lower()) \
+             .flatMap(lambda x: x.split()) \
+             .map(lambda x: (x, 1)) \
+             .reduceByKey(lambda x,y:x+y,<b>numPartitions=2</b>)
+&gt;&gt;&gt; wordcounts.mapPartitionsWithSplit(countPartitions).collectAsMap()
+{0: 244075, 1: 245136}
+</pre>
+            <h2>Monitoring memory usage</h2>
+            <p>
+                  Spark/PySpark work best when there is sufficient resources to keep all the data in RDDs loaded in physical memory.  In practice I found its best to carefully monitor whats happening with memory on each machine in the cluster.  Although Spark's web pages offer a lot of information on task progress, I've found that installing and running <a href="http://ganglia.sourceforge.net/">Ganglia</a> provides a great way to monitor memory across the network.
+            </p>
+            <img src="./Getting started with PySpark - Part 2_files/ganglia.png">
+            <h2>Further reading</h2>
+                <p>
+                     For more information on PySpark I suggest taking a look at some of these links:
+                     </p><ul>
+                        <li>
+                            <a href="http://www.youtube.com/watch?v=xc7Lc8RA8wE">PySpark: Python API for Spark (YouTube, presentation by Josh Rosen)</a>.
+                        </li>
+                        <li>
+                            <a href="http://spark.apache.org/docs/0.9.0/python-programming-guide.html">Spark Python Programming Guide</a>
+                        </li>
+                        <li>
+                            <a href="http://spark.incubator.apache.org/docs/latest/api/pyspark/pyspark.rdd.RDD-class.html" target="new">Resilient Distributed Dataset (RDD) API documentation</a>
+                        </li>    
+                    </ul>
+                <p></p>
+            </div> 
+            <hr>
+<div id="comments" onclick="feedback.toggle_comments();"><h2><a>26 Comments</a></h2>
+</div> 
+
+<h2>Leave a comment</h2>
+
+<form action="http://www.mccarroll.net/cgi-bin/feedback.py" method="post">
+     <fieldset>  
+            <legend>Anti-Spam Check</legend>
+            <div class="form-group">
+                <label for="feedback_hex">Hexadecimal number</label>
+                <input class="form-control" type="readonly" name="hex" id="feedback_hex" style="width:200px;">
+            </div>
+            <div class="form-group">
+                <label for="feedback_dec">Decimal equivalent</label>
+                <input class="form-control" type="text" name="decimal" id="feedback_dec" style="width:200px;">
+            </div>
+     </fieldset>
+     <fieldset>
+	    <legend>Comment</legend>
+            <div style="display:none;">
+                    <input type="text" name="category" id="feedback_category" value="pyspark">
+            </div>
+            <div class="form-group">
+                <label for="feedback_name">Name</label>
+                <input class="form-control" type="text" name="name" id="feedback_name" style="width:200px;" disabled="">
+            </div>
+            <div class="form-group">
+                <label for="feedback_comment">Comment</label>      
+                <textarea class="form-control" type="text" name="comment" id="feedback_comment" rows="10" cols="50" disabled=""></textarea>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="submit" id="feedback_submit" value="Submit" style="width:80px;" disabled="">
+            </div>
+      </fieldset>
+</form> 
+
+<script type="text/javascript">feedback.init_form();feedback.load_comments("pyspark");</script>
+
+
+        </div>   
+	<div id="footer" class="container">
+    <hr>
+    <p>
+        Copyright © <a href="http://www.mccarroll.net/blog/pyspark2/#">Niall McCarroll</a> 2007-2015
+    </p>
+</div>
+
+
+    
+
+
+</body></html>
